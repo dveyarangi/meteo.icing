@@ -1,10 +1,10 @@
 - java folder contains code for downloading archive
 - python:
-	> archive - contains API for accessing the archive
+	- archive - contains API for accessing the archive
 	     - inventory.py          - archive indexer
 	     - structure.py          - enhanced netcdf dataset for accessing the archive
 	     
-	> util - for utilities
+	- util - for utilities
 	     - ncdump.py             - prints contents of a netcdf file
 	     
 	- archive_plot_test.py       - example for plotting temperature average 
