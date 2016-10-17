@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="java/src"/>
+	<classpathentry kind="src" path="python"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/joda-time-2.9.4.jar"/>
+	<classpathentry kind="lib" path="java/lib/joda-time-2.9.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
