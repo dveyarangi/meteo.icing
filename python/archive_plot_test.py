@@ -1,5 +1,5 @@
 
-from structure import MDataset
+from archive.structure import MDataset
 
 import numpy as np
 import matplotlib.pyplot as plt

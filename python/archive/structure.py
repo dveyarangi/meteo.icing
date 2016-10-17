@@ -1,6 +1,6 @@
 from netCDF4 import Dataset
 
-from inventory import Inventory  
+from archive.inventory import Inventory  
 
 import numpy as np
 #
