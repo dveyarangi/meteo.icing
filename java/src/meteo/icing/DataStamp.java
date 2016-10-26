@@ -1,3 +1,4 @@
+package meteo.icing;
 public class DataStamp {
 	String path = "junk";
 	String time;

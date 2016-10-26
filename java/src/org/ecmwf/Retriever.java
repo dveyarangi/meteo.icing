@@ -3,8 +3,8 @@
  * (C) Copyright 2012-2013 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
- * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
- * In applying this licence, ECMWF does not waive the privileges and immunities 
+ * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+ * In applying this licence, ECMWF does not waive the privileges and immunities
  * granted to it by virtue of its status as an intergovernmental organisation nor
  * does it submit to any jurisdiction.
  *
@@ -12,15 +12,17 @@
 
 package org.ecmwf;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.io.File;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import meteo.icing.IProgressMeter;
 
 class Retriever implements Logger {
 
@@ -48,20 +50,20 @@ class Retriever implements Logger {
 				try {
 					url = result.getString("url");
 				} catch (Exception e) {
-					log(e);
+					this.log(e);
 				}
 				try {
 					key = result.getString("key");
 				} catch (Exception e) {
-					log(e);
+					this.log(e);
 				}
 				try {
 					email = result.getString("email");
 				} catch (Exception e) {
-					log(e);
+					this.log(e);
 				}
 			} catch (Exception e) {
-				log(e);
+				this.log(e);
 			}
 		}
 
@@ -77,11 +79,11 @@ class Retriever implements Logger {
 		api = new API(url, key, email, this);
 	}
 
-	public void retrieve(String resource, Object req, String target)
+	public void retrieve(String resource, Object req, String target, IProgressMeter meter)
 			throws IOException, APIError {
 		String status = "";
-		log("ECMWF API java library version " + API.VERSION);
-		log("ECMWF API at " + api.getUrl());
+		this.log("ECMWF API java library version " + API.VERSION);
+		this.log("ECMWF API at " + api.getUrl());
 		JSONObject o;
 		o = api.GET("/who-am-i");
 		String name = o.getString("full_name");
@@ -89,13 +91,13 @@ class Retriever implements Logger {
 			name = "user '" + o.getString("uid") + "'";
 		}
 
-		log("Welcome " + name);
+		this.log("Welcome " + name);
 
 		o = api.GET(resource + "/news");
 		try {
 			String[] news = o.getString("news").split("\n");
 			for (int i = 0; i < news.length; i++)
-				log(news[i]);
+				this.log(news[i]);
 		} catch (Exception e) {
 		}
 
@@ -105,9 +107,11 @@ class Retriever implements Logger {
 		String last = location;
 		if (!o.getString("status").equals(status)) {
 			status = o.getString("status");
-			log("Request is " + status);
+			this.log("Request is " + status);
 		}
 		while (code == 202) {
+			if( meter != null )
+				meter.setProgress(0, "Queued " + target);
 			api.sleep();
 			o = api.GET(location);
 			last = location;
@@ -115,13 +119,13 @@ class Retriever implements Logger {
 			code = api.getCode();
 			if (!o.getString("status").equals(status)) {
 				status = o.getString("status");
-				log("Request is " + status);
+				this.log("Request is " + status);
 			}
 		}
 
 		if (code == 303) {
 			long size = o.getInt("size");
-			long total = api.transfer(api.getLocation(), target, size);
+			long total = api.transfer(api.getLocation(), target, size, meter);
 			if (total != size)
 				throw new APIServerError("Size mismatch " + size + " != "
 						+ total);
@@ -134,7 +138,7 @@ class Retriever implements Logger {
 
 		}
 
-		log("Done.");
+		this.log("Done.");
 	}
 
 	@Override

@@ -34,6 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import meteo.icing.IProgressMeter;
+
 public class API {
 
 	static class IgnoreHostVerification implements HostnameVerifier {
@@ -213,7 +215,7 @@ public class API {
 		}
 	}
 
-	private long _transfer(String from, String target, long size)
+	private long _transfer(String from, String target, long size, IProgressMeter meter)
 			throws IOException, APIError {
 
 
@@ -238,6 +240,7 @@ public class API {
 		if (code == 200) {
 			long step = size / 100;
 			long nextPercentage = 0;
+			int stepIdx = 0;
 
 			InputStream in = null;
 			FileOutputStream out = null;
@@ -252,8 +255,10 @@ public class API {
 					total += count;
 					if( total > nextPercentage)
 					{
+						meter.setProgress(stepIdx, "Downloading " + target);
 						System.out.print(".");
 						nextPercentage += step;
+						stepIdx++;
 					}
 				}
 			} finally {
@@ -273,12 +278,12 @@ public class API {
 		return total;
 	}
 
-	long transfer(String from, String target, long size) throws IOException,
+	long transfer(String from, String target, long size, IProgressMeter meter) throws IOException,
 			APIError {
 		int tries = 0;
 		while (true) {
 			try {
-				return this._transfer(from, target, size);
+				return this._transfer(from, target, size, meter);
 			} catch (APIServerError e) {
 				if (tries++ >= MAX_TRIES)
 					throw e;

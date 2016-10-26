@@ -1,18 +1,10 @@
-import java.io.File;
-import java.io.IOException;
+package meteo.icing;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ecmwf.APIError;
-import org.ecmwf.DataServer;
-import org.json.JSONObject;
-
-public class Downloader implements Runnable
+public class Conf
 {
-	private DataServer server;
-	private DataStamp stamp;
-	private boolean stampProblem;
-
 	static Map <String, Map <String, String>> ERA_INTERIM_REQUESTS = new HashMap <> ();
 
 	public static String FORMAT_GRIB = "grib";
@@ -108,70 +100,27 @@ public class Downloader implements Runnable
 		CAMS_REQUESTS.put("isobaric", forecast);
 	}
 
-	public Downloader(DataStamp stamp)
-	{
-		this.server = new DataServer();
-		this.stamp = stamp;
-		this.stampProblem = false;
+
+	public static final Conf ERA_INTERIM = new Conf();
+
+	static {
+		ERA_INTERIM.headers = ERA_INTERIM_HEADER;
+		ERA_INTERIM.paramSets = ERA_INTERIM_REQUESTS;
+		ERA_INTERIM.params = ERA_INTERIM_PARAMS;
 	}
 
-	@Override
-	public void run()
-	{
-//		System.out.println("***********");
-		Map<String, String> headers = ERA_INTERIM_HEADER;
-		Map<String, Map<String, String>> paramsets = ERA_INTERIM_REQUESTS;
+	public Map<String, String> headers;
+	public Map<String, Map<String, String>> paramSets;
+	public Map<String, String> params;
 
-		stampProblem = false;
-		new File(stamp.path).mkdirs();
+	public Conf() {}
 
-			for(String type : paramsets.keySet())
-			{
-				for(String paramName : ERA_INTERIM_PARAMS.keySet())
-				{
+	public Map<String, String> getHeaders() { return headers; }
+
+	public Map<String, Map<String, String>> getParamSets() { return paramSets; }
+
+	public Map <String, String> getParams()	{ return params; }
 
 
-					String filename = stamp.path + "/" + stamp.date + "_" + stamp.time + "Z_" + paramName +"_"+ type + ".nc";
-					File file = new File( filename );
-
-
-					if( file.exists() && file.length() > 0)
-						continue;
-
-					JSONObject request = new JSONObject();
-
-					for(String headerKey : headers.keySet())
-						request.put( headerKey, headers.get( headerKey ));
-
-					request.put("param", ERA_INTERIM_PARAMS.get(paramName));
-					request.put("date", stamp.date );
-					request.put("time", stamp.time + ":00:00" );
-					request.put("target",filename);
-
-					Map <String, String> params = paramsets.get( type );
-					for(Map.Entry <String, String> entry : params.entrySet())
-					{
-						request.put( entry.getKey(), entry.getValue() );
-					}
-
-
-					try {
-						server.retrieve(request);
-					}
-					catch( APIError | IOException e )
-					{
-						e.printStackTrace();
-						stampProblem = true;
-					}
-				}
-			}
-	}
-
-	public boolean isFailed() { return stampProblem; }
-
-	public DataStamp stamp()
-	{
-		return stamp;
-	}
 
 }

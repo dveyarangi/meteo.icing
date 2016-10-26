@@ -1,3 +1,4 @@
+package meteo.icing;
 /*
  *
  * (C) Copyright 2012-2013 ECMWF.
@@ -20,7 +21,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class ECMWFDownloader {
+public class Main {
 
 	/**
 	 * Run the downloader
@@ -29,16 +30,16 @@ public class ECMWFDownloader {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		ECMWFDownloader d = new ECMWFDownloader();
+		Main d = new Main();
 		d.run();
 	}
 
 	private class DownloadCallback implements Runnable
 	{
 
-		private Downloader downloader;
+		private DownloadThread downloader;
 
-		public DownloadCallback(Downloader downloader)
+		public DownloadCallback(DownloadThread downloader)
 		{
 			this.downloader = downloader;
 		}
@@ -55,15 +56,34 @@ public class ECMWFDownloader {
 				} catch( InterruptedException e ) { e.printStackTrace(); }
 				stamps.add( downloader.stamp());
 			}
+
+			Integer id = downloader.getProgressMeter().bar();
+//			System.out.println(id);
+			synchronized(barPool)
+			{
+				barPool.add( id );
+			}
 		}
 
 	}
 
-	private Queue <DataStamp> stamps = new LinkedList <> ();
-	private ExecutorService executor = Executors.newFixedThreadPool(12);
+	Queue <Integer> barPool = new LinkedList <Integer> ();
 
+	private Queue <DataStamp> stamps = new LinkedList <> ();
+	private ExecutorService executor;
+
+	public static int THREADS = 12;
 
 	public void run() {
+
+		Conf conf = Conf.ERA_INTERIM;
+
+		Console console = new Console( THREADS );
+		console.show();
+
+		this.executor = Executors.newFixedThreadPool( THREADS );
+
+		for(int t = 0; t < THREADS; t ++) barPool.add( new Integer(t) );
 
 		DateTimeZone.setDefault(DateTimeZone.UTC);
 		DateTime startingTime = new DateTime( 2016, 5, 30, 0, 0 );
@@ -93,9 +113,26 @@ public class ECMWFDownloader {
 
 		stamp:while(!stamps.isEmpty())
 		{
+			if(barPool.isEmpty())
+			{
+				try
+				{
+					Thread.sleep(100);
+				} catch( InterruptedException e )
+				{
+					e.printStackTrace();
+				}
+				continue stamp;
+			}
+
 			DataStamp stamp = stamps.poll();
 
-			DownloadCallback downloader = new DownloadCallback( new Downloader( stamp ) );
+			Integer bar;
+			synchronized(barPool)
+			{
+				bar = barPool.poll();
+			}
+			DownloadCallback downloader = new DownloadCallback( new DownloadThread( conf, stamp, console.getProgressMeter( bar ) ) );
 
 			executor.execute(downloader);
 
