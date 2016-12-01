@@ -1,0 +1,1 @@
+1) To use the .ecmfwapirc key file, add "HOME" variable to Run Configuration Environment, with value "etc"

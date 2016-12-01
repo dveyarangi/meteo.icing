@@ -87,7 +87,7 @@ class MVariable:
 		# retrieve netcdf dataset for this parameter type:
 		ds = self.inventory.getSample( self.spatialType, self.varname, index )
 		if ds is None: # returnz zero array if no data found
-			grid = np.zeros
+			grid = None
 		else:
 			grid = ds.variables[self.varname][0]
 			ds.close()

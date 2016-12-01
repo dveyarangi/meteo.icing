@@ -104,7 +104,7 @@ public class Main {
 			DataStamp stamp = new DataStamp();
 			stamp.date = monthStr + "-" + dayStr;
 			stamp.time = hourStr;
-			stamp.path  = "download/era-interim/" + monthStr + "/" + dayStr;
+			stamp.path  = conf.rootDir + "/" + monthStr + "/" + dayStr;
 
 			stamps.add( stamp );
 

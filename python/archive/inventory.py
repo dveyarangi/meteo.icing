@@ -148,8 +148,8 @@ class Inventory:
             # open netcdf dataset:
             ds = Dataset( path ) 
             return ds
-        except OSError: # failed to  
-            print ("Failed to open " + path + " : ")
+        except (OSError, IOError) as e: # failed to  
+            print ("Failed to open ", path, " : ", e)
             
         return None
    

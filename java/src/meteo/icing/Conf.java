@@ -21,9 +21,19 @@ public class Conf
 
 	public static Map <String, String> ERA_INTERIM_PARAMS = new HashMap <String, String> ();
 	static {
-		ERA_INTERIM_PARAMS.put("T", "130.128");
-		ERA_INTERIM_PARAMS.put("W", "135.128");
-		ERA_INTERIM_PARAMS.put("RH", "157.128");
+//		ERA_INTERIM_PARAMS.put("T", "130.128");
+//		ERA_INTERIM_PARAMS.put("W", "135.128");
+//		ERA_INTERIM_PARAMS.put("RH", "157.128");
+		ERA_INTERIM_PARAMS.put("CC", "248.128"); // cloud cover
+		ERA_INTERIM_PARAMS.put("DIV", "155.128"); // divergence
+		ERA_INTERIM_PARAMS.put("GP", "129.128"); // geopotential
+		ERA_INTERIM_PARAMS.put("PV", "60.128"); // potential vorticity
+		ERA_INTERIM_PARAMS.put("CIWC", "247.128"); // specific ice water content
+		ERA_INTERIM_PARAMS.put("CLWC", "246.128"); // specific liquid water content
+		ERA_INTERIM_PARAMS.put("U", "131.128"); // u wind comp
+		ERA_INTERIM_PARAMS.put("V", "132.128"); // v wind comp
+		ERA_INTERIM_PARAMS.put("V0", "138.128"); // Relative vorticity
+
 	}
 
 
@@ -101,7 +111,7 @@ public class Conf
 	}
 
 
-	public static final Conf ERA_INTERIM = new Conf();
+	public static final Conf ERA_INTERIM = new Conf("H:/icing/era-interim");
 
 	static {
 		ERA_INTERIM.headers = ERA_INTERIM_HEADER;
@@ -109,11 +119,16 @@ public class Conf
 		ERA_INTERIM.params = ERA_INTERIM_PARAMS;
 	}
 
+	public String rootDir;
+
 	public Map<String, String> headers;
 	public Map<String, Map<String, String>> paramSets;
 	public Map<String, String> params;
 
-	public Conf() {}
+	public Conf(String rootDir)
+	{
+		this.rootDir = rootDir;
+	}
 
 	public Map<String, String> getHeaders() { return headers; }
 
