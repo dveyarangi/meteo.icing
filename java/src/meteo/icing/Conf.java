@@ -21,9 +21,9 @@ public class Conf
 
 	public static Map <String, String> ERA_INTERIM_PARAMS = new HashMap <String, String> ();
 	static {
-//		ERA_INTERIM_PARAMS.put("T", "130.128");
-//		ERA_INTERIM_PARAMS.put("W", "135.128");
-//		ERA_INTERIM_PARAMS.put("RH", "157.128");
+		ERA_INTERIM_PARAMS.put("T", "130.128");
+		ERA_INTERIM_PARAMS.put("W", "135.128");
+		ERA_INTERIM_PARAMS.put("RH", "157.128");
 		ERA_INTERIM_PARAMS.put("CC", "248.128"); // cloud cover
 		ERA_INTERIM_PARAMS.put("DIV", "155.128"); // divergence
 		ERA_INTERIM_PARAMS.put("GP", "129.128"); // geopotential

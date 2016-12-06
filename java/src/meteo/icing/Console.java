@@ -41,7 +41,7 @@ public class Console
 		    @Override
 		    public void run() {
 				bar.setValue( progress );
-				label.setText( text );
+				bar.setString( text );
 		    }
 		    public void update(int progress, String text)
 		    {
@@ -73,7 +73,7 @@ public class Console
 
 	public void show()
 	{
-		JFrame frame = new JFrame("ERA Interim ");
+		JFrame frame = new JFrame("ERA Interim Downloader");
 
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,27 +101,35 @@ public class Console
 			JLabel idLabel = new JLabel(""+(bidx+1));
 
 			JProgressBar progressBar = bars[bidx] = new JProgressBar();
-			JLabel progressLabel = labels[bidx] = new JLabel("Initializing...                                                                ");
+			progressBar.setStringPainted( true );
+			progressBar.setString("Initializing... ");
+			JLabel progressLabel = labels[bidx] = new JLabel(" ");
 
 			ProgressMeter meter = meters[bidx] = new ProgressMeter(bidx, progressBar, progressLabel);
 
 
 			c.weightx = 0;
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.gridx = 0; c.gridy = bidx+1;
+			c.gridx = 0; c.gridy = 2*bidx+1;
 			root.add(idLabel, c);
 
 			c.weightx = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.gridx = 1; c.gridy = bidx+1;
+			c.gridx = 1; c.gridy = 2*bidx+1;
 
 			root.add(progressBar, c);
 
-			c.weightx = 0;
+			c.weightx = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
-			c.gridx = 2; c.gridy = bidx+1;
+			c.gridx = 1; c.gridy = 2*bidx+2; c.gridwidth = 2;
 
 			root.add(progressLabel, c);
+
+/*			c.weightx = 1;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = 1; c.gridy = 2*bidx+2; c.gridwidth = 2;
+
+			root.add(new JLabel("---"), c);*/
 		}
 
 		stampLabel = new JLabel("---");
