@@ -18,8 +18,10 @@ import java.util.concurrent.Executors;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
+import meteo.icing.era.Conf;
+import meteo.icing.era.DataStamp;
+import meteo.icing.era.DownloadThread;
 
 public class Main {
 
@@ -90,25 +92,14 @@ public class Main {
 		DateTime endingTime = new DateTime( 1996, 1, 1, 0, 0 );
 
 
-		DateTimeFormatter dayFormat = DateTimeFormat.forPattern("dd");
-		DateTimeFormatter monthYearFormat = DateTimeFormat.forPattern("yyyy-MM");
-		DateTimeFormatter hourFormat = DateTimeFormat.forPattern("HH");
-
 		for(DateTime datetime = startingTime ;
-				datetime.isAfter( endingTime); datetime = datetime.plusHours(-6) )
+			datetime.isAfter( endingTime);
+			datetime = datetime.plusHours(-6) )
 		{
-			String dayStr = dayFormat.print(datetime);
-			String monthStr = monthYearFormat.print(datetime);
-			String hourStr = hourFormat.print(datetime);
 
-			DataStamp stamp = new DataStamp();
-			stamp.date = monthStr + "-" + dayStr;
-			stamp.time = hourStr;
-			stamp.path  = conf.rootDir + "/" + monthStr + "/" + dayStr;
 
+			DataStamp stamp = new DataStamp( datetime );
 			stamps.add( stamp );
-
-//			System.out.println(stamp.path);
 		}
 
 		stamp:while(!stamps.isEmpty())

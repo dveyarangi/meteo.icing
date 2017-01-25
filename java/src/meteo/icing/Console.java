@@ -1,5 +1,6 @@
 package meteo.icing;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+
+import meteo.icing.era.DataStamp;
 
 public class Console
 {
@@ -99,6 +102,7 @@ public class Console
 		for(int bidx = 0; bidx < bars.length; bidx ++ )
 		{
 			JLabel idLabel = new JLabel(""+(bidx+1));
+			idLabel.setPreferredSize(new Dimension(20, 10));
 
 			JProgressBar progressBar = bars[bidx] = new JProgressBar();
 			progressBar.setStringPainted( true );
