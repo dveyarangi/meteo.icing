@@ -24,7 +24,7 @@ from netCDF4 import Dataset
 class Inventory:
     
     # Archive path
-    archive_path = 'E:/Development/workspaces/meteo/ecmwf-api-client/download/era-interim'
+    archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
      
     #
     # storage string formats:
@@ -63,6 +63,8 @@ class Inventory:
         for ( dirpath, dirnames, filenames ) in os.walk( self.archive_path ) :
             # print( dirpath )
             files.extend( filenames )
+            
+        print ("Total %d in archive.", len(files))
          
         print ("Indexing archive...")
         # go over the list of files and fill the index:
@@ -84,16 +86,16 @@ class Inventory:
             
             # test that the file is readable:
             # (open and close netcdf dataset)
-            try:
-                #print( "Validating " + filepath )
-                dataset = Dataset( filepath ) 
-                dataset.close()
-            except KeyError as e: # this might happen for partially downloaded file
-                print ("Failed to open ", filepath, " : ", e)
-                continue
-            except OSError: # otherly corrupted file:
-                print ("Failed to open ", filepath, " : ")
-                continue
+            #try:
+            #    print( "Validating " + filepath )
+            #    dataset = Dataset( filepath ) 
+            #    dataset.close()
+            #except KeyError as e: # this might happen for partially downloaded file
+            #    print ("Failed to open ", filepath, " : ", e)
+            #    continue
+            #except OSError: # otherly corrupted file:
+            #    print ("Failed to open ", filepath, " : ")
+            #    continue
             
             
             # get or create time-stamped files list:

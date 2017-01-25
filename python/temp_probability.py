@@ -7,7 +7,6 @@ from util.renderer import Renderer
 ################################################
 # simple read example:
 
-
 isobaric = MDataset("isobaric")
 
 renderer = Renderer( isobaric.lats, isobaric.lons )
