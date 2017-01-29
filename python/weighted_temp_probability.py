@@ -1,17 +1,22 @@
+import numpy as np
+import sys
 
 from archive.structure import MDataset
-
-import numpy as np
 from util.renderer import Renderer
-
 
 ZERO_K = 273.15
 
+################################################
+# algorithm parameters:
+
+histogram_file = 't.prob'
+
+basetime_filter = 0 
 
 ################################################
 # read probabilities histogram from file:
 
-with open('t.prob') as f:
+with open( histogram_file ) as f:
     icing_prob = [[float(x) for x in line.split()] for line in f]
 weights_histogram = list(enumerate(icing_prob))
     
@@ -30,15 +35,17 @@ level = 15 # 850mb
 ################################################
 # get physical parameter grid:
 t_var = isobaric['t']
+if t_var is not None: 
+    t_grid = t_var[time][level]
 
-t_grid = t_var[time][level]
-
-
-################################################
-# debug
-print("Grid size: ", t_grid.shape)
-print ("Level: ", isobaric.levels[level])
-print("Units: ", t_var.units)
+    ################################################
+    # debug
+    print("Grid size: " + str(t_grid.shape[0]) + "x" + str(t_grid.shape[1]))
+    print("Level: " + str(isobaric.levels[level]))
+    print("Units: " + str(t_var.units))
+else:
+    print "Failed to open sample grid"
+    sys.exit()
 
 totalGrids = 0
 title = "Weighted probability at %smb (00Z)"% (isobaric.levels[level])
@@ -61,7 +68,7 @@ print ("Calculating %s..." % title)
 for time in isobaric.times:
     
     # time filter:
-    if time.hour is not 00: continue
+    if time.hour is not basetime_filter: continue
 
     # getting 3D slice:
     t_slice = t_var[time];
@@ -97,8 +104,8 @@ for x in xrange(count.shape[0]):
 
 renderer = Renderer( isobaric.lats, isobaric.lons )
 
-renderer.render( weighted_count, title, "P")
-    
-#savefig('foo.png', bbox_inches='tight')
+renderer.render( grid=weighted_count, title=title, units="P" )
+
+print "All done."
     
     

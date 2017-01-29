@@ -18,8 +18,8 @@ class Renderer:
                     lat_ts=-90,lat_0=lat_0,lon_0=lon_0)
         '''            
         
-        print("lons: ",lons.min(),":",lons.max())
-        print("lats: ",lats.min(),":",lats.max())
+        print("lons: " + str(lons.min()) + ":" + str(lons.max()))
+        print("lats: " + str(lats.min()) + ":" + str(lats.max()))
         
         self.map = Basemap(projection='mill',
                            lat_0=lats.min(),

@@ -5,6 +5,7 @@ Created on Oct 4, 2016
 '''
 
 import os 
+import sys
 import datetime
 
 from netCDF4 import MFDataset
@@ -24,7 +25,8 @@ from netCDF4 import Dataset
 class Inventory:
     
     # Archive path
-    archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
+    # archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
+    archive_path = 'H:/icing/test_archive/'
      
     #
     # storage string formats:
@@ -52,6 +54,9 @@ class Inventory:
     #
     def read_index(self):
         
+        if not os.path.isdir( self.archive_path ):
+            print "Archive path " + self.archive_path + " not found"
+            sys.exit()
         # prepare list for all files in the archive:
         files = [];    
         
@@ -64,7 +69,7 @@ class Inventory:
             # print( dirpath )
             files.extend( filenames )
             
-        print ("Total %d in archive.", len(files))
+        print ("Total %d in archive." % len(files))
          
         print ("Indexing archive...")
         # go over the list of files and fill the index:
