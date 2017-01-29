@@ -15,13 +15,17 @@ time = isobaric.times[0]
 level = 15 # 850mb
 #level = 8 # 500mb
 
-t_var = isobaric['t']
+if t_var is not None: 
+    t_grid = t_var[time][level]
 
-t_grid = t_var[time][level]
-
-print("Grid size: ", t_grid.shape)
-print ("Level: ", isobaric.levels[level])
-print("Units: ", t_var.units)
+    ################################################
+    # debug
+    print("Grid size: " + str(t_grid.shape[0]) + "x" + str(t_grid.shape[1]))
+    print("Level: " + str(isobaric.levels[level]))
+    print("Units: " + str(t_var.units))
+else:
+    print "Failed to open sample grid"
+    sys.exit()
 
 ####################################
 # iteration example
