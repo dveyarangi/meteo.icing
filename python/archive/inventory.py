@@ -56,6 +56,7 @@ class Inventory:
         
         if not os.path.isdir( self.archive_path ):
             print "Archive path " + self.archive_path + " not found"
+            print "Please fix 'archive_path' in inventory.py"
             sys.exit()
         # prepare list for all files in the archive:
         files = [];    
