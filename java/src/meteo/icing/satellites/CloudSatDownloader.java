@@ -31,7 +31,7 @@ public class CloudSatDownloader
 	public static DateTimeFormatter dayFormat = DateTimeFormat.forPattern("dd");
 	public static DateTimeFormatter monthYearFormat = DateTimeFormat.forPattern("yyyy-MM");
 
-    public static String DOWNLOAD_DIR = "H:/icing/Dropbox/archive/cloudsat";
+    public static String DOWNLOAD_DIR = "H:/icing/Dropbox/icing/archive/cloudsat";
 
     public static String LOGIN = "";
     public static String PASSW = "p1t3kantr0p";
@@ -160,7 +160,7 @@ public class CloudSatDownloader
 		    			            ze = zipStream.getNextEntry();
 		    			    	}
 		    			  }
-		    			  catch(IOException e)
+		    			  catch(Exception e)
 		    			  {
 		    				  throw new RuntimeException(e);
 		    			  }
