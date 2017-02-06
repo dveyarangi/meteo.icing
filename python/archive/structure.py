@@ -3,6 +3,7 @@ from netCDF4 import Dataset
 from archive.inventory import Inventory  
 
 import numpy as np
+from numpy.core.defchararray import upper
 #
 # Represents a spatial structure stored in the archive
 # Provides simple syntax to access archive variables;
@@ -53,7 +54,35 @@ class MDataset:
 	
 		
 		return variable
+	
+	def closestLonIndex(self, lon):
 			
+		prev_lon = self.lons[0]
+		for (idx, curr_lon) in enumerate(self.lons):
+			if lon > curr_lon or lon < prev_lon:
+				continue
+			
+			if lon < (curr_lon-prev_lon)/2 :
+				return idx-1 
+			else:
+				return idx
+			
+			prev_lon = curr_lon
+	def closestLatIndex(self, lat):
+			
+		prev_lat = self.lats[0]
+		for (idx, curr_lat) in enumerate(self.lats):
+			if lat > curr_lat or lat < prev_lat:
+				continue
+			
+			if lat < (curr_lat-prev_lat)/2 :
+				return idx-1 
+			else:
+				return idx
+			
+			prev_lat = curr_lat
+
+	 
 #	
 # Matches archive files data set for a single parameter
 # 						
@@ -63,8 +92,6 @@ class MVariable:
 		 
 		# keeping archive index reference for file names search:   
 		self.inventory = inventory
-		# variable name: 
-		self.varname = varname
 		# inventory spatial type:
 		self.spatialType = spatialType
 		
@@ -72,7 +99,9 @@ class MVariable:
 		sampleSet = self.inventory.randomSample( self.spatialType, varname )
 		
 		# retrieving netcdf variable:
-		sampleVar = sampleSet.variables[varname]
+		
+		self.varname = Inventory.map[varname.upper()]
+		sampleVar = sampleSet.variables[self.varname]
 		
 		# retain some variable's parameters for convinience:
 		self.shape = sampleVar.shape
@@ -93,3 +122,5 @@ class MVariable:
 			ds.close()
 		
 		return grid
+	
+		

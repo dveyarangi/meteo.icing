@@ -55,6 +55,8 @@ class Inventory:
         # maps a 'datetime' key to list of files for this date
         # fill the index
         self.index = self.load_index()
+        
+        self.init_parameter_map()
          
     #
     # Reads archive index and validates files.
@@ -241,6 +243,9 @@ class Inventory:
         
         file_handle.close()
         
-        
-        
+    def init_parameter_map(self):
+        Inventory.map = {}
+        Inventory.map['T'] = 't'
+        Inventory.map['RH'] = 'r'
+    
                

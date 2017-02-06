@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
 class Renderer:
-
-    def __init__(self, lats, lons):   
+    
+    def __init__(self, lats, lons, vmin = 0, vmax = 1):   
         
         self.lats = lats
         self.lons = lons
+        
+        self.vmin = vmin
+        self.vmax = vmax
 
         # Get some parameters for projection
         lon_0 = lons.mean()
@@ -41,7 +44,7 @@ class Renderer:
         
         m = self.map
         
-        cs = m.pcolor( self.xi, self.yi, np.squeeze(grid), vmin=0, vmax=0.5 )
+        cs = m.pcolor( self.xi, self.yi, np.squeeze(grid), vmin=self.vmin, vmax=self.vmac )
         
         # Add Grid Lines
         m.drawparallels(np.arange(self.lats.min(), self.lats.max(), 10.), labels=[1,0,0,0], fontsize=10)
