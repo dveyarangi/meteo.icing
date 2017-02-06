@@ -77,6 +77,7 @@ public class Console
 	public void show()
 	{
 		JFrame frame = new JFrame("ERA Interim Downloader");
+		System.out.println("test successful");
 
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,6 +104,7 @@ public class Console
 		{
 			JLabel idLabel = new JLabel(""+(bidx+1));
 			idLabel.setPreferredSize(new Dimension(20, 10));
+			idLabel.setMaximumSize(new Dimension(20, 10));
 
 			JProgressBar progressBar = bars[bidx] = new JProgressBar();
 			progressBar.setStringPainted( true );

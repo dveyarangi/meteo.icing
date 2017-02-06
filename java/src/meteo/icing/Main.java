@@ -88,12 +88,11 @@ public class Main {
 		for(int t = 0; t < THREADS; t ++) barPool.add( new Integer(t) );
 
 		DateTimeZone.setDefault(DateTimeZone.UTC);
-		DateTime startingTime = new DateTime( 2016, 5, 30, 0, 0 );
+		DateTime startingTime = new DateTime( 2016, 12, 31, 0, 0 );
 		DateTime endingTime = new DateTime( 1996, 1, 1, 0, 0 );
 
-
 		for(DateTime datetime = startingTime ;
-			datetime.isAfter( endingTime);
+			datetime.isAfter(endingTime) || datetime.isEqual( endingTime );
 			datetime = datetime.plusHours(-6) )
 		{
 
