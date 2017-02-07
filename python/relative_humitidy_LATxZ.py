@@ -32,7 +32,6 @@ grid3d = var[time]
 #lon_index = isobaric.closestLonIndex(lon)
 #grid2d = grid3d[:,:,lon_index]
 lat_index = isobaric.closestLatIndex(lat)
-grid2d = grid3d[:,lat_index,:] 
 
 ################################################
 # print debug info
@@ -51,8 +50,13 @@ else:
 #####################################
 # rendering
 
-title = "Relative humidity vertical slice at lat=%s , %s" % (lat, time)
-R.draw_heatmap( grid2d, isobaric.lons, isobaric.levels, title, vmin=0, vmax=100)
+R.draw_heatmap( grid2d, 
+                xaxis=isobaric.lons, 
+                yaxis=isobaric.levels, 
+                title="Relative humidity vertical slice at lat=%s , %s" % (lat, time), 
+                vmin=0, 
+                vmax=100
+            )
 
 print "All done."
 
