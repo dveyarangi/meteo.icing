@@ -44,7 +44,7 @@ class Renderer:
         
         m = self.map
         
-        cs = m.pcolor( self.xi, self.yi, np.squeeze(grid), vmin=self.vmin, vmax=self.vmac )
+        cs = m.pcolor( self.xi, self.yi, np.squeeze(grid), vmin=self.vmin, vmax=self.vmax )
         
         # Add Grid Lines
         m.drawparallels(np.arange(self.lats.min(), self.lats.max(), 10.), labels=[1,0,0,0], fontsize=10)

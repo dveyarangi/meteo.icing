@@ -68,11 +68,12 @@ class MDataset:
 				return idx
 			
 			prev_lon = curr_lon
+			
 	def closestLatIndex(self, lat):
 			
 		prev_lat = self.lats[0]
 		for (idx, curr_lat) in enumerate(self.lats):
-			if lat > curr_lat or lat < prev_lat:
+			if lat < curr_lat or lat > prev_lat:
 				continue
 			
 			if lat < (curr_lat-prev_lat)/2 :
