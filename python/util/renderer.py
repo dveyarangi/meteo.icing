@@ -64,4 +64,33 @@ class Renderer:
         plt.title( title )
         
         plt.show()
+        
+def create_axis_labels(array, step=1):
+    values = []
+    labels = []
+    for (idx, value) in enumerate(array) :
+        if idx % step == 0:
+            values.append(idx)
+            labels.append(str(value))
+    return (values, labels)
+
+def draw_heatmap( grid2d, xaxis, yaxis, title="", vmin=0, vmax=1 ):
+    # name levels (y) axis ticks:
+    (yValues, yLabels) = create_axis_labels( yaxis, 2 )
+    plt.yticks(yValues, yLabels)
+    # name lats (x) axis ticks:
+    (xValues, xLabels) = create_axis_labels( xaxis, 5 )
+    plt.xticks(xValues, xLabels)
+    
+    # prepare heatmap:
+    plt.imshow(grid2d, cmap='hot', interpolation='nearest', vmin=vmin, vmax=vmax)
+    
+    # set title
+    plt.title( title )
+    
+    # adding color legend:
+    plt.colorbar(orientation="horizontal") 
+    
+    # show the image:
+    plt.show()
     
