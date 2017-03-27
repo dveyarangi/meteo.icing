@@ -28,7 +28,10 @@ class Renderer:
                            lat_0=lats.min(),
                            lon_0=lons.min(), 
                            lat_1=lats.max(),
-                           lon_1=lons.max())
+                           lon_1=lons.max(),
+                           llcrnrlat=lats.min(), urcrnrlat=lats.max(),
+                           llcrnrlon=lons.min(), urcrnrlon=lons.max()
+                           )
          # Because our lon and lat variables are 1D, 
         # use meshgrid to create 2D arrays 
         # Not necessary if coordinates are already in 2D arrays.
