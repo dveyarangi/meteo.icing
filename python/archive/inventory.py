@@ -27,8 +27,10 @@ class Inventory:
     
     # Archive path
     # archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
-    archive_path = 'H:/icing/Dropbox/icing/archive'
-    
+    # archive_path = 'H:/icing/Dropbox/icing/archive'
+    archive_path = 'F:\DB\Era_Interim'
+
+
     cache_path = ''
      
     #
@@ -247,5 +249,7 @@ class Inventory:
         Inventory.map = {}
         Inventory.map['T'] = 't'
         Inventory.map['RH'] = 'r'
-    
+        Inventory.map['Q'] = 'q'
+        Inventory.map['CLWC'] = 'clwc'
+
                
