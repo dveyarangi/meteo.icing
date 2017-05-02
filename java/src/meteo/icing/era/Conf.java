@@ -3,6 +3,8 @@ package meteo.icing.era;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.DateTimeZone;
+
 public class Conf
 {
 	public static String FORMAT_GRIB = "grib";
@@ -139,8 +141,12 @@ public class Conf
 		ERA_INTERIM_HEADER.put("area", "50/-5/5/75");
 
 	}
+	
+	
+	public static final String ERA_ARCHIVE_PATH = "H:/icing/Dropbox/icing/archive/era";
+	public static final String SAT_ARCHIVE_PATH = "H:/icing/Dropbox/icing/archive/cloudsat";
 
-	public static final Conf ERA_INTERIM = new Conf("H:/icing/Dropbox/icing/archive");
+	public static final Conf ERA_INTERIM = new Conf(ERA_ARCHIVE_PATH, SAT_ARCHIVE_PATH);
 
 
 
@@ -155,16 +161,25 @@ public class Conf
 
 	///////////////////////////////////////////////////////////////////////////////
 
-	public String rootDir;
+	public String eraDir;
+	public String satDir;
 
 	public String format = FORMAT_NETCDF;
 
 	public Map<String, String> headers;
 	public ParamGroup [] groups;
+	
+	public double minlat = 5;
+	public double minlon = -5;
+	public double maxlat = 50;
+	public double maxlon = 75;
 
-	public Conf(String rootDir)
+
+	public Conf(String eraDir, String satDir)
 	{
-		this.rootDir = rootDir;
+		DateTimeZone.setDefault( DateTimeZone.forID("UTC") );
+		this.eraDir = eraDir;
+		this.satDir = satDir;
 	}
 
 	public Map<String, String> getHeaders() { return headers; }

@@ -16,7 +16,7 @@ isobaric = MDataset("isobaric")
 
 parameter = 'rh';
 
-time = datetime.datetime(2011, 1, 1)
+time = datetime.datetime(2011, 8, 16)
 
 lat = 32
 lon = 35
@@ -29,9 +29,13 @@ grid3d = var[time]
 ################################################
 # select vertical slice along "lon_index" line
 
-#lon_index = isobaric.closestLonIndex(lon)
-#grid2d = grid3d[:,:,lon_index]
-lat_index = isobaric.closestLatIndex(lat)
+lon_index = isobaric.closestLonIndex(lon)
+grid2d = grid3d[:,:,lon_index]
+
+#lat_index = isobaric.closestLatIndex(lat)
+#grid2d = grid3d[:,lat_index,:] # cuts the grid along specified dimension at specified index
+
+#grid2d = np.swapaxes(grid2d, 0, 1)
 
 ################################################
 # print debug info
@@ -53,7 +57,7 @@ else:
 R.draw_heatmap( grid2d, 
                 xaxis=isobaric.lons, 
                 yaxis=isobaric.levels, 
-                title="Relative humidity vertical slice at lat=%s , %s" % (lat, time), 
+                title="%s vertical slice at lat=%s , %s" % (parameter, lat, time), 
                 vmin=0, 
                 vmax=100
             )
