@@ -28,7 +28,7 @@ class Inventory:
     # Archive path
     # archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
     # archive_path = 'H:/icing/Dropbox/icing/archive'
-    archive_path = 'F:\DB\Era_Interim'
+    archive_path = 'D:/DB/Era_Interim'
 
 
     cache_path = ''
@@ -36,6 +36,7 @@ class Inventory:
     #
     # storage string formats:
     timestamp_format = "%Y-%m-%d_%HZ"
+    year_format = '%Y'
     year_month_format = "%Y-%m"
     day_format = "%d"
 
@@ -88,10 +89,11 @@ class Inventory:
     
     #
     # creates full path to given file
-    #
+    # FIXED BY TH on 25-Jun-2017 because the actual format is Year/Year-Month/Day/filename and not Year-Month/Day/filename
     def create_filename( self, timestamp, filename ):
-        return self.archive_path + "/" + timestamp.strftime( self.year_month_format ) +\
-                                   "/" + timestamp.strftime( self.day_format ) +\
+        return self.archive_path + "/" + timestamp.strftime(self.year_format) +\
+                                   "/" + timestamp.strftime(self.year_month_format) +\
+                                   "/" + timestamp.strftime(self.day_format) +\
                                    "/" + filename
      
     #    
@@ -103,16 +105,21 @@ class Inventory:
         filepaths = self.index[ time ]
         
         # filenames parameter part matches netcdf parameter name in uppercase:
-        varname = varname.upper()
+        # varname = varname.upper()
+        # FIXED BY TH at 27-Jun-2017:
+        # Some variable names are included inside others, like T and TP, so
+        # we need to look for _T_ and _TP_, otherwise we don't know what we'll get
+        # when looking for T
+        search_varname = '_' + varname.upper() + '_'
         path = ""
         
         # finding file for specified parameter and spatial type:
         for aPath in filepaths:
             if type not in aPath:
                 continue
-            if varname not in aPath:
+            if search_varname not in aPath:
                 continue
-            
+
             path = aPath
                 
         try: 
@@ -251,5 +258,8 @@ class Inventory:
         Inventory.map['RH'] = 'r'
         Inventory.map['Q'] = 'q'
         Inventory.map['CLWC'] = 'clwc'
+        Inventory.map['LWC'] = 'lwc'
+        Inventory.map['RHP'] = 'rhp'
+        Inventory.map['TP'] = 'tp'
 
                
