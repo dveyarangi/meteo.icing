@@ -13,6 +13,8 @@ public class DataStamp
 	public static DateTimeFormatter dayFormat = DateTimeFormat.forPattern("dd");
 	public static DateTimeFormatter monthYearFormat = DateTimeFormat.forPattern("yyyy-MM");
 	public static DateTimeFormatter hourFormat = DateTimeFormat.forPattern("HH");
+	public static DateTimeFormatter eraFormat = DateTimeFormat.forPattern("yyyy-MM-dd_HH");
+	public static DateTimeFormatter cloudsatFormat = DateTimeFormat.forPattern("yyyyDDDHHmmss");
 
 
 	public static String toTimeStr( long timestamp )

@@ -68,7 +68,7 @@ public class DownloadThread implements Runnable
 				String fixedDateStr = DataStamp.toDateStr(fixedTimestamp);
 
 				String datetimeStr =  fixedDateStr + "_" + fixedTimeStr + "Z";
-				String path  = conf.rootDir + "/" + fixedMonthStr + "/" + fixedDayStr;
+				String path  = conf.eraDir + "/" + fixedMonthStr + "/" + fixedDayStr;
 
 				new File(path).mkdirs();
 

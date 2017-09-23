@@ -23,7 +23,6 @@ import com.vividsolutions.jts.geom.LineString;
 import meteo.icing.utils.ColorScale;
 import meteo.icing.utils.ColorScaleConf;
 import ucar.ma2.Array;
-import ucar.nc2.Group;
 import ucar.nc2.dataset.NetcdfDataset;
 
 public class SwathTest
@@ -52,8 +51,6 @@ public class SwathTest
 			File satfile = new File( filename );
 
 			NetcdfDataset ncd = NetcdfDataset.openDataset( satfile.getAbsolutePath() );
-
-			Group productRoot = ncd.getRootGroup().getGroups().get(0);
 
 			ISwath swath = new GranuleSwath(ncd);
 			Array lats = swath.getLats();
