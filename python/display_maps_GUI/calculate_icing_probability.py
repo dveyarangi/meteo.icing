@@ -8,7 +8,7 @@
 import numpy as np
 from netCDF4 import Dataset
 
-from util.constants import *
+from util.constants import ZERO_K
 import display_maps_GUI.constants_display_maps_GUI as const_GUI
 
 

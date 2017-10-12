@@ -6,3 +6,21 @@
 **/__pycache__/
 *.pyc
 .gradle/**
+python_hdf4-0.9-cp27-cp27m-win_amd64.whl
+python/util/try.nc
+python/util/ERA_Interim/2000/2000-09/03/2000-09-03_18Z_LWC_isobaric.nc
+python/tzvika_tests/__init__.py
+python/display_maps_GUI/__init__.py
+python/ERA-Interim_specific_LWC_Dec-2016.nc
+python/2010128055614_21420_CS_2B-GEOPROF_GRANULE_P_R04_E03.hdf.py
+python/2010128055614_21420_CS_2B-GEOPROF_GRANULE_P_R04_E03.hdf
+python/2006166131201_00702_CS_2B-CWC-RVOD_GRANULE_P_R04_E00.hdf.py.png
+Cloudsat CWC-RVOD properties.txt.bak
+Cloudsat CWC-RVOD properties.txt
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/meteo.icing.iml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/codeStyleSettings.xml

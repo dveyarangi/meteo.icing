@@ -4,7 +4,7 @@ from mpl_toolkits.basemap import Basemap
 
 class Renderer:
     
-    def __init__(self, lats, lons, vmin = 0, vmax = 1):   
+    def __init__(self, lats, lons, vmin = 0, vmax = 1):
         
         self.lats = lats
         self.lons = lons
