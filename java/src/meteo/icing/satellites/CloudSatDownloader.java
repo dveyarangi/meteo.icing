@@ -26,12 +26,12 @@ public class CloudSatDownloader
 
     public static String [] PRODUCTS = new String [] {
     		"2B-GEOPROF-LIDAR.P_R05",
-    		//"2B-CWC-RVOD.P_R04"
+    		"2B-CWC-RVOD.P_R04"
     };
 	public static DateTimeFormatter dayFormat = DateTimeFormat.forPattern("dd");
 	public static DateTimeFormatter monthYearFormat = DateTimeFormat.forPattern("yyyy-MM");
 
-    public static String DOWNLOAD_DIR = "H:/icing/Dropbox/icing/archive/cloudsat";
+    public static String DOWNLOAD_DIR = "F:/icing/Dropbox/icing/archive/cloudsat";
 
     public static String LOGIN = "";
     public static String PASSW = "p1t3kantr0p";
@@ -93,31 +93,40 @@ public class CloudSatDownloader
 
 	    String lastFile = null;
 	    int failCount = 0;
+	    
+	    String [] years = new String [] { /*"2011", "2012", "2013", "2014", "2015",*/ "2016" };
 	    for( String productName : PRODUCTS )
 	    {
 	    	  //ftp.changeWorkingDirectory("..");
 	    	  //ftp.changeWorkingDirectory(productName);
 	    	  //ftp.pasv();
-	    	FTPFile [] yearDirs = ftp.listDirectories( productName );
-	    	if( yearDirs.length == 0)
-	    	    throw new IllegalStateException("Something is wrong, expected folders not found.");
-	    	for( FTPFile yearDir : yearDirs )
+//	    	FTPFile [] yearDirs = ftp.listDirectories( productName );
+//	    	if( yearDirs.length == 0)
+//	    	    throw new IllegalStateException("Something is wrong, expected folders not found.");
+//	    	for( FTPFile yearDir : yearDirs )
+	    	for( String yearDir: years)
 	    	{
-	    	    int year = Integer.parseInt(yearDir.getName());
+	    	    int year = Integer.parseInt(yearDir);
 
-	    		String yearDirName =  productName + "/" + yearDir.getName();
+	    		String yearDirName =  productName + "/" + yearDir;
 	    		FTPFile [] dayDirs = ftp.listDirectories( yearDirName );
 		    	if( dayDirs.length == 0)
 		    	    throw new IllegalStateException("Something is wrong, expected folders not found.");
 		    	for( FTPFile dayDir : dayDirs )
 		    	{
 		    	    int dayOfYear = Integer.parseInt( dayDir.getName());
+		    	    if( dayOfYear < 355)
+		    	    	continue;
 
 	    			DateTime datetime = new DateTime(0).withYear( year ).withDayOfYear(dayOfYear);
 		    		String dayDirName = yearDirName +  "/" + dayDir.getName();
 		    		FTPFile [] files = ftp.listFiles( dayDirName );
 			    	if( files.length == 0)
-			    	    throw new IllegalStateException("Something is wrong, expected folders not found.");
+			    	{
+			    		System.out.println("Missing folder for " + dayDirName);
+			    		continue;
+			    	}
+			    	
 		    		for(int fidx = 0; fidx < files.length; )
 		    		{
 		    			FTPFile file = files[fidx];

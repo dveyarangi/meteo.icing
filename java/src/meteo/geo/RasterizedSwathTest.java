@@ -28,7 +28,7 @@ public class RasterizedSwathTest
     	MapRenderer renderer = new MapRenderer();
 
 
-		ColorScaleConf colorConf = ColorScaleConf.read("E:/Development/workspaces/meteo/meteo.icing/data/etc/chromatic.colorscale");
+		ColorScaleConf colorConf = ColorScaleConf.read("E:/Development/workspaces/meteo/meteo.icing/etc/Chromatic");
 
 		ColorScale scale = new ColorScale(0, 1, colorConf);
 

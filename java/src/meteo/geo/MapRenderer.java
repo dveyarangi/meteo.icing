@@ -14,8 +14,6 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
-import org.geotools.renderer.GTRenderer;
-import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.LineSymbolizer;
 import org.geotools.styling.Rule;
@@ -25,7 +23,6 @@ import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
 import org.opengis.filter.FilterFactory;
 import org.opengis.geometry.BoundingBox;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class MapRenderer
 {
@@ -35,7 +32,7 @@ public class MapRenderer
 	{
         ///////////////////////////////////////////////////////////
         // display a data store file chooser dialog for shapefiles
-        File file = new File( "E:/Development/workspaces/meteo/meteo.icing/data/maps/simple/ne_50m_admin_0_countries_lakes.shp" );
+        File file = new File( "E:/Development/workspaces/meteo/meteo.icing/etc/maps/ne_50m_admin_0_countries_lakes.shp" );
 
 
         SimpleFeatureSource featureSource = null;
