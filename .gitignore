@@ -24,3 +24,4 @@ Cloudsat CWC-RVOD properties.txt
 .idea/meteo.icing.iml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/codeStyleSettings.xml
+*.nc
