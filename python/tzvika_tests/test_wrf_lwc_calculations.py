@@ -64,7 +64,7 @@ lower_level = float(np.nanmin(LWC_at_req_level))
 upper_level = float(np.nanmax(LWC_at_req_level))
 levels = np.arange(lower_level, upper_level, (upper_level - lower_level)/20)
 contours = bm.contourf(x, y, to_np(LWC_at_req_level), levels=levels)
-plt.clabel(contours, inline=1, fontsize=10, fmt="%i")
+# plt.clabel(contours, inline=1, fontsize=10, fmt="%i")
 
 plt.colorbar(ax=ax, orientation="horizontal", pad=.05)
 
