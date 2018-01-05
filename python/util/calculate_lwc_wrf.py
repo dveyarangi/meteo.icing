@@ -4,8 +4,7 @@
 ################################################
 
 import numpy as np
-import sys
-from wrf import getvar, interplevel, smooth2d, to_np, get_basemap, latlon_coords
+from wrf import getvar, interplevel
 
 
 
@@ -33,7 +32,6 @@ def calculate_lwc_wrf(ncfile):
     lwc_grid = np.ones([total_levels, clwc_var.shape[1], clwc_var.shape[2]])
 
     Rd = 2.87/1000  # m3*mb/Kg*K ->  m3*mb/g*K
-    epsilon = 0.622  # Rd/Rv approximately in Earth's atmosphere
     for current_level in range(total_levels):
         current_pressure = levels_list[current_level]
 
