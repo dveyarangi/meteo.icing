@@ -15,6 +15,8 @@ time = isobaric.times[0]
 level = 15 # 850mb
 #level = 8 # 500mb
 
+t_var = isobaric["t"]
+
 if t_var is not None: 
     t_grid = t_var[time][level]
 

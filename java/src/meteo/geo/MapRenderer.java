@@ -28,7 +28,7 @@ public class MapRenderer
 {
 	MapContent map;
 
-	public MapRenderer()
+	public MapRenderer(Color mapColor)
 	{
         ///////////////////////////////////////////////////////////
         // display a data store file chooser dialog for shapefiles
@@ -62,7 +62,7 @@ public class MapRenderer
 				new Rectangle2D.Double((lonCenter-lonSpan/2), (latCenter-latSpan/2), lonSpan, latSpan));
 		mapArea.setBounds(box);
 
-        Style style = createLineStyle(1, Color.LIGHT_GRAY );
+        Style style = createLineStyle(1, mapColor );
         Layer layer = new FeatureLayer(featureSource, style);
         map.addLayer(layer);
 	}

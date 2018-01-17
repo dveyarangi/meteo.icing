@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 
+import lombok.Getter;
 import meteo.icing.utils.ColorScaleConf.ColoredValue;
 
 /**
@@ -20,8 +21,8 @@ public class ColorScale
     	C toColor(float r, float g, float b, float a);
     }
 
-    public ColorCreator <com.badlogic.gdx.graphics.Color> LIBGDX_CREATOR = (r,g,b,a) -> new com.badlogic.gdx.graphics.Color(r,g,b,a);
-    public ColorCreator <java.awt.Color>                     AWT_CREATOR = (r,g,b,a) -> new java.awt.Color(r,g,b,a);
+    public static ColorCreator <com.badlogic.gdx.graphics.Color> LIBGDX_CREATOR = (r,g,b,a) -> new com.badlogic.gdx.graphics.Color(r,g,b,a);
+    public static ColorCreator <java.awt.Color>                     AWT_CREATOR = (r,g,b,a) -> new java.awt.Color(r,g,b,a);
 
     public ColorCreator <com.badlogic.gdx.graphics.Color> DEFAULT_CREATOR = LIBGDX_CREATOR;
 
@@ -44,7 +45,7 @@ public class ColorScale
 	/**
 	 * Confuguration
 	 */
-	private ColorScaleConf conf;
+	@Getter private ColorScaleConf conf;
 
 
 
@@ -99,14 +100,14 @@ public class ColorScale
 		
 		int colorNum = colors.size();
 
-		if( value <= min )
+		if( value <= min || value < colors.get( 0 ).value)
 		{
 			// value below minimum for this colorscale
 			color = this.colorBelow( 0 );
 			return result.toColor( color.r, color.g, color.b, color.a );
 		}
 		
-		if( value >= max ) // value above maximum for this colorscale
+		if( value >= max || value > colors.get( colors.size()-1 ).value) // value above maximum for this colorscale
 		{
 			color = this.colorAbove( colorNum-1 );
 			return result.toColor( color.r, color.g, color.b, color.a );

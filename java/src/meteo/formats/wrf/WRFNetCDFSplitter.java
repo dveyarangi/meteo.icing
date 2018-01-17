@@ -1,15 +1,19 @@
-package meteo.icing.wrf;
+package meteo.formats.wrf;
+
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
-import com.google.common.io.Files;
+import com.google.gson.Gson;
 
-import lombok.extern.slf4j.Slf4j;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.Attribute;
 import ucar.nc2.Dimension;
@@ -17,13 +21,12 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFileWriter;
 import ucar.nc2.Variable;
 
-@Slf4j
 public class WRFNetCDFSplitter 
 {
 	public static final String dataRoot = "E:/meteo/dropbox/Dropbox/Icing/WRF-output-3X3";
 	public static final String outRoot = "E:/meteo/test/Icing/WRF-output-3X3-split";
 
-	public static Map <String, String> DIMMAP = new HashMap <> ();
+/*	public static Map <String, String> DIMMAP = new HashMap <> ();
 	static {
 		DIMMAP.put("Time", "Times");
 		DIMMAP.put("DateStrLen","");
@@ -34,31 +37,72 @@ public class WRFNetCDFSplitter
 		DIMMAP.put("soil_layers_stag","");
 		DIMMAP.put("west_east_stag","");
 		DIMMAP.put("south_north_stag","");
-	}
+	}*/
 	
 	public static void main( String ... args ) throws IOException
 	{
-		String dateDir = "2016112000";
-		String filename = "wrfout_d01_2016-11-19_18_00_00";
-		String filePath = dataRoot + File.separator + dateDir + File.separator + filename;
-		NetcdfFile ncfile = null;
+		String inputDir,
+			outputDir,
+			configFile;
 		try {
-			ncfile = NetcdfFile.open(filePath);
-			split( ncfile, dateDir, filename );
-		} catch (IOException ioe) {
-			log.error("trying to open " + filename, ioe);
+			inputDir   = args[0];
+			outputDir  = args[1];
+			configFile = args.length == 2 ? "wrf_split_config.json" : args[2];
+		}
+		catch(Exception e) {
+			System.out.println("Usage: ");
+			System.out.println("");
+			System.out.println("	netcdfsplit <inputDir> <outputDir>");
+			System.out.println("	netcdfsplit <inputDir> <outputDir> [configFile]");
 			return;
-		} finally { 
-			if (null != ncfile) try { ncfile.close(); } catch (IOException ioe) {	log.error("trying to close " + filename, ioe); }
 		}
 		
-		System.out.println("=== ");
+		Gson gson = new Gson();
+		Config config = gson.fromJson(
+				new InputStreamReader(
+					ClassLoader.getSystemResourceAsStream(""+configFile)), 
+				Config.class);
 		
+		Queue <File> dirStack = new LinkedList <> ();
+		dirStack.add( new File(inputDir) );
+		
+		while( ! dirStack.isEmpty() )
+		{
+			File file = dirStack.poll();
+			
+			if( file.isDirectory() ) // add more 
+				dirStack.addAll( Arrays.asList( file.listFiles() ) );
+			
+			
+			String inputFilepath = file.getAbsolutePath();
+			String inputFilename = file.getName();
+			
+			if( ! inputFilename.startsWith(config.prefix) )
+				continue;
+			
+			String outputFileDir = file.getParent().replace(inputDir, outputDir);
+			
+			new File(outputFileDir).mkdirs();
+			
+			NetcdfFile ncfile = null;
+			try {
+				ncfile = NetcdfFile.open(inputFilepath);
+				split( ncfile, inputFilename, outputFileDir, config );
+			} catch (IOException ioe) {
+				System.out.println("trying to open " + inputFilepath);
+				ioe.printStackTrace();
+				return;
+			} finally { 
+				if (null != ncfile) try { ncfile.close(); } catch (IOException ioe) { ioe.printStackTrace(); }
+			}
+		}
+		
+
 	}
 	
 	public static final String [] AXIS_NAMES = { "Times", "DN" };
 
-	private static void split(NetcdfFile ncfile, String dateDir, String filename) throws IOException 
+	private static void split(NetcdfFile ncfile, String filename, String outputDir, Config config) throws IOException 
 	{
 		// extracting axis variables:
 		List <Variable> axes = new ArrayList <> ();
@@ -84,8 +128,8 @@ public class WRFNetCDFSplitter
 				}
 			}
 			
-			if( !isIsobaric )
-				continue;
+//			if( !isIsobaric )
+//				continue;
 			
 			String [] coordNames = getCoordNames( var );
 			if( coordNames == null ) // skip dimensionless grids
@@ -93,9 +137,12 @@ public class WRFNetCDFSplitter
 			
 			String name = var.getShortName();
 			
-			String outPath = outRoot + File.separator + dateDir + File.separator + filename + "_" + name;
+			if( !config.variables.contains(name) )
+				continue;
 			
-			Files.createParentDirs( new File(outPath) );
+			String outPath = outputDir + File.separator + filename + "_" + name;
+			
+			new File(outPath).getParentFile().mkdirs();
 		
 			NetcdfFileWriter writer = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf4, outPath, null);
 			
@@ -124,7 +171,6 @@ public class WRFNetCDFSplitter
 			////////////////////////////////////////
 			// write headers
 			writer.create();
-			
 			
 			try {
 				for(int vidx = 0; vidx < varsToCopy.size(); vidx ++)

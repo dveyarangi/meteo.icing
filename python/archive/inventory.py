@@ -26,9 +26,9 @@ from netCDF4 import Dataset
 class Inventory:
     
     # Archive path
-    # archive_path = 'H:/icing/Dropbox/icing/archive/era-interim'
+    archive_path = 'H:/icing/Dropbox/icing/archive/era'
     # archive_path = 'H:/icing/Dropbox/icing/archive'
-    archive_path = 'F:\DB\Era_Interim'
+    #archive_path = 'F:\DB\Era_Interim'
 
 
     cache_path = ''
@@ -248,6 +248,8 @@ class Inventory:
     def init_parameter_map(self):
         Inventory.map = {}
         Inventory.map['T'] = 't'
+        Inventory.map['U'] = 'u'
+        Inventory.map['V'] = 'v'
         Inventory.map['RH'] = 'r'
         Inventory.map['Q'] = 'q'
         Inventory.map['CLWC'] = 'clwc'

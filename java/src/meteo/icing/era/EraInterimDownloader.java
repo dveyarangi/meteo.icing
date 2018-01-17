@@ -1,4 +1,4 @@
-package meteo.icing;
+package meteo.icing.era;
 /*
  *
  * (C) Copyright 2012-2013 ECMWF.
@@ -19,11 +19,9 @@ import java.util.concurrent.Executors;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import meteo.icing.era.Conf;
-import meteo.icing.era.DataStamp;
-import meteo.icing.era.DownloadThread;
+import meteo.icing.Console;
 
-public class Main {
+public class EraInterimDownloader {
 
 	/**
 	 * Run the downloader
@@ -32,7 +30,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		Main d = new Main();
+		EraInterimDownloader d = new EraInterimDownloader();
 		d.run();
 	}
 

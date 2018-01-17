@@ -28,7 +28,7 @@ class MDataset:
 		self.spatialType = spatialType 
 		
 		# caching shared properties:
-		sampleSet = self.inventory.randomSample("isobaric", "t")
+		sampleSet = self.inventory.randomSample(spatialType, "t")
 		
 		# cache some frequently used variables:
 		self.lons = sampleSet.variables['longitude'][:]

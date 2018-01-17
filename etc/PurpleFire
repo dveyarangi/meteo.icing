@@ -1,0 +1,28 @@
+{
+  "name": "PurpleFire",
+  "cyclicOrigin": -1,
+  "useInterpolation": true,
+  "colors": [
+    {
+      "color": "000000ff",
+      "value": 0.0
+    },
+    {
+      "color": "0407CAff",
+      "value": 0.13
+    },
+    {
+      "color": "840745ff",
+      "value": 0.42
+    },
+    {
+      "color": "EA3200ff",
+      "value": 0.71
+    },
+    {
+      "color": "FEFD93ff",
+      "value": 1
+    }
+  ],
+  "empty": "00000000"
+}

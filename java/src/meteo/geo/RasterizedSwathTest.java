@@ -11,7 +11,7 @@ import meteo.icing.utils.BufferedCanvas;
 import meteo.icing.utils.ColorScale;
 import meteo.icing.utils.ColorScaleConf;
 import ucar.ma2.Array;
-import ucar.ma2.ArrayFloat;
+import ucar.ma2.ArrayShort;
 import ucar.nc2.dataset.NetcdfDataset;
 
 public class RasterizedSwathTest
@@ -20,12 +20,12 @@ public class RasterizedSwathTest
 	static int WIDTH = 2400;
 	static int HEIGHT = 1600;
 
-	static String PARAM = "IWC";
+	static String PARAM = TestData.parameter;
 
     public static void main(String[] args) throws Exception
     {
 
-    	MapRenderer renderer = new MapRenderer();
+    	MapRenderer renderer = new MapRenderer(Color.LIGHT_GRAY);
 
 
 		ColorScaleConf colorConf = ColorScaleConf.read("E:/Development/workspaces/meteo/meteo.icing/etc/Chromatic");
@@ -53,7 +53,7 @@ public class RasterizedSwathTest
 
 			Granule granule = new Granule( ncd );
 
-			ArrayFloat.D2 values = granule.read(PARAM);
+			ArrayShort.D2 values = granule.read(PARAM);
 
 			int trackLength = values.getShape()[0];
 			int trackWidth = values.getShape()[1];

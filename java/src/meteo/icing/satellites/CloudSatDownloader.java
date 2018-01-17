@@ -25,7 +25,7 @@ public class CloudSatDownloader
     public static String CLOUDSAT_SERVER = "ftp.cloudsat.cira.colostate.edu";
 
     public static String [] PRODUCTS = new String [] {
-    		"2B-GEOPROF-LIDAR.P_R05",
+    		//"2B-GEOPROF-LIDAR.P_R05",
     		"2B-CWC-RVOD.P_R04"
     };
 	public static DateTimeFormatter dayFormat = DateTimeFormat.forPattern("dd");
@@ -94,10 +94,10 @@ public class CloudSatDownloader
 	    String lastFile = null;
 	    int failCount = 0;
 	    
-	    String [] years = new String [] { /*"2011", "2012", "2013", "2014", "2015",*/ "2016" };
+	    String [] years = new String [] { "2011" };
 	    for( String productName : PRODUCTS )
 	    {
-	    	  //ftp.changeWorkingDirectory("..");
+	    	  //ftp.changeWorkingDire ctory("..");
 	    	  //ftp.changeWorkingDirectory(productName);
 	    	  //ftp.pasv();
 //	    	FTPFile [] yearDirs = ftp.listDirectories( productName );
@@ -111,11 +111,14 @@ public class CloudSatDownloader
 	    		String yearDirName =  productName + "/" + yearDir;
 	    		FTPFile [] dayDirs = ftp.listDirectories( yearDirName );
 		    	if( dayDirs.length == 0)
-		    	    throw new IllegalStateException("Something is wrong, expected folders not found.");
+		    	{
+		    	   // throw new IllegalStateException("Something is wrong, expected folders not found.");
+		    		continue;
+		    	}
 		    	for( FTPFile dayDir : dayDirs )
 		    	{
 		    	    int dayOfYear = Integer.parseInt( dayDir.getName());
-		    	    if( dayOfYear < 355)
+		    	    if( dayOfYear <= 14)
 		    	    	continue;
 
 	    			DateTime datetime = new DateTime(0).withYear( year ).withDayOfYear(dayOfYear);
