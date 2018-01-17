@@ -23,7 +23,7 @@ isobaric = MDataset("isobaric")
 ################################################
 # get data grid coordinates:
 time = isobaric.times[10]
-#time = isobaric.times[27916]  # 09-Feb-2015
+# time = isobaric.times[27916]  # 09-Feb-2015
 # levels(hPa): 0=100 1=150 2=200 3=250 4=300 5=350 6=400 7=450 8=500 9=550
 #              10=600 11=650 12=700 13=750 14=800 15=850 16=900 17=950 18=1000
 if show_slice == 0:

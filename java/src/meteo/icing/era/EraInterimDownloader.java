@@ -30,9 +30,16 @@ public class EraInterimDownloader {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		Conf conf = Conf.ERA_INTERIM;
+
+		DateTime startTime = new DateTime( 2016, 12, 31, 0, 0 );
+		DateTime endTime = new DateTime( 1996, 1, 1, 0, 0 );
+
+		
 		EraInterimDownloader d = new EraInterimDownloader();
-		d.run();
+		d.run(conf, startTime, endTime);
 	}
+
 
 	private class DownloadCallback implements Runnable
 	{
@@ -74,9 +81,7 @@ public class EraInterimDownloader {
 
 	public static int THREADS = 12;
 
-	public void run() {
-
-		Conf conf = Conf.ERA_INTERIM;
+	public void run( Conf conf, DateTime startingTime, DateTime endingTime ) {
 
 		Console console = new Console( THREADS );
 		console.show();
@@ -86,8 +91,6 @@ public class EraInterimDownloader {
 		for(int t = 0; t < THREADS; t ++) barPool.add( new Integer(t) );
 
 		DateTimeZone.setDefault(DateTimeZone.UTC);
-		DateTime startingTime = new DateTime( 2016, 12, 31, 0, 0 );
-		DateTime endingTime = new DateTime( 1996, 1, 1, 0, 0 );
 
 		for(DateTime datetime = startingTime ;
 			datetime.isAfter(endingTime) || datetime.isEqual( endingTime );
