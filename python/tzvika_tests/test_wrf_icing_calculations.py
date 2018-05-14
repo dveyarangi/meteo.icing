@@ -2,11 +2,13 @@ import numpy as np
 from netCDF4 import Dataset
 import matplotlib.pyplot as plt
 from wrf import getvar, interplevel, to_np, get_basemap, latlon_coords
+import matplotlib.image as mpimg
+
 
 from python.util.calculate_lwc_wrf import calculate_lwc_wrf
 from python.util.calculate_icing_wrf import calculate_icing_wrf
 
-files_path = 'D:/DB/WRF'
+files_path = 'D:/WRFOUT'
 req_year = '2016'
 req_month = '12'
 req_day = '14'
@@ -15,6 +17,8 @@ dir_hour = '12'
 req_hour = '10'
 
 requested_level = 850
+
+meteosat_dust_files_path = 'D:/MeteoSat/DUST-IR_8.7_10.8_12.0/'
 
 # slwc_threshold = 0.2 # Anything above is considered a cloud
 slwc_threshold = 0 # Anything above is considered a cloud
@@ -35,7 +39,9 @@ else:
 
 
 # Open the NetCDF file
-filename = files_path + '/' + req_year + req_month + req_day + dir_hour\
+# filename = files_path + '/' + req_year + req_month + req_day + dir_hour\
+#                 + '/wrfout_d01_' + req_year + '-' + req_month + '-' + req_day + '_' + req_hour + '_00_00'
+filename = files_path + '/' + req_year + '/' + req_month + '/' + req_year + req_month + req_day + dir_hour\
                 + '/wrfout_d01_' + req_year + '-' + req_month + '-' + req_day + '_' + req_hour + '_00_00'
 ncfile = Dataset(filename)
 
@@ -51,6 +57,9 @@ icing_prob_at_req_level = icing_prob[requested_level_index]
 p = getvar(ncfile, "pressure")
 z = getvar(ncfile, "z", units="dm")
 
+fig = plt.figure(figsize=(10, 7))
+ax_wrf = fig.add_subplot(1, 2, 1)
+
 # Interpolate geopotential height
 ht_for_map_creation = interplevel(z, p, requested_level)
 
@@ -61,16 +70,16 @@ lats, lons = latlon_coords(ht_for_map_creation)
 bm = get_basemap(ht_for_map_creation)
 
 # Create the figure
-fig = plt.figure(figsize=(12,9))
-ax = plt.axes()
+# fig = plt.figure(figsize=(12,9))
+#ax = plt.axes()
 
 # Convert the lat/lon coordinates to x/y coordinates in the projection space
 x, y = bm(to_np(lons), to_np(lats))
 
 # Add the geographic boundaries
-bm.drawcoastlines(linewidth=0.25)
-bm.drawstates(linewidth=0.25)
-bm.drawcountries(linewidth=0.25)
+bm.drawcoastlines(linewidth=0.25, ax=ax_wrf)
+bm.drawstates(linewidth=0.25, ax=ax_wrf)
+bm.drawcountries(linewidth=0.25, ax=ax_wrf)
 
 plt.title( str(requested_level) + "hPa Icing Probabilities")
 
@@ -78,12 +87,21 @@ plt.title( str(requested_level) + "hPa Icing Probabilities")
 #lower_level = float(np.nanmin(icing_prob_at_req_level))
 #upper_level = float(np.nanmax(icing_prob_at_req_level))
 levels = np.arange(0, 1.05, 0.05)
-contours = bm.contourf(x, y, to_np(icing_prob_at_req_level), levels=levels)
+contours = bm.contourf(x, y, to_np(icing_prob_at_req_level), levels=levels, ax=ax_wrf)
 # plt.clabel(contours, inline=1, fontsize=10, fmt="%i")
 
-plt.colorbar(ax=ax, orientation="horizontal", pad=.05)
+# plt.colorbar(orientation="horizontal", pad=.05)
 
 
+#plt.show()
+
+# Show the dust METEOSAT image
+fig.add_subplot(1, 2, 2)
+
+image_filename = meteosat_dust_files_path + req_year + req_month + req_day + '_' + req_hour + '00.gif'
+img=mpimg.imread(image_filename)
+img = img[270:800, 430:700, :]
+imgplot = plt.imshow(img)  # , interpolation='nearest', aspect='auto', extent=[0, 100, 0, 100*(img.shape[0]/img.shape[1])])
 plt.show()
 
 # ################################################
