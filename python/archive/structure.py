@@ -126,4 +126,4 @@ class MVariable:
             grid = ds.variables[self.varname][0]
             ds.close()
 
-        return grid
+return grid

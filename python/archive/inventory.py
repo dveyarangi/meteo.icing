@@ -1,6 +1,5 @@
 '''
 Created on Oct 4, 2016
-
 @author: Fima
 '''
 
@@ -261,5 +260,3 @@ class Inventory:
         Inventory.map['LWC'] = 'lwc'
         Inventory.map['RHP'] = 'rhp'
         Inventory.map['TP'] = 'tp'
-
-               

@@ -9,4 +9,8 @@ public interface ISwath
 
 	Array getLons();
 
+	Array getHeights();
+	
+	Array getTimes();
+
 }

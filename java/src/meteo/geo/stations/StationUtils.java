@@ -35,7 +35,7 @@ public class StationUtils {
 		
 		Set <String> adaptiveStations = new HashSet <> ();
 		
-		DateTime startTime = new DateTime(1998, 5, 1, 00, 00);
+		DateTime startTime = new DateTime(2012, 6, 26, 00, 00);
 		
 		DateTime datetime = new DateTime(startTime);
 		
@@ -272,8 +272,6 @@ public class StationUtils {
 
 	public static String createSondeURL(int year, int month, int day, int hour, String stationId)
 	{
-		
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("http://weather.uwyo.edu/cgi-bin/sounding?region=naconf&TYPE=TEXT%3ALIST")
 			.append("&YEAR=").append(year)
@@ -283,6 +281,5 @@ public class StationUtils {
 			.append("&STNM=").append(stationId);
 			
 		return sb.toString();
-
 	}
 }

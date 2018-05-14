@@ -35,10 +35,10 @@ public class SwathTest
     public static void main(String[] args) throws Exception
     {
 
-    	MapRenderer renderer = new MapRenderer();
+    	MapRenderer renderer = new MapRenderer(Color.LIGHT_GRAY);
 
 
-		ColorScaleConf colorConf = ColorScaleConf.read("E:/Development/workspaces/meteo/meteo.icing/data/etc/chromatic.colorscale");
+		ColorScaleConf colorConf = ColorScaleConf.read("E:/Development/workspaces/meteo/meteo.icing/etc/Chromatic");
 		ColorScale scale = new ColorScale(0, 2*TestData.FILENAMES.length-1, colorConf);
 
 		Color [] colors = new Color [] { Color.RED, Color.BLUE, Color.GREEN };
@@ -68,7 +68,7 @@ public class SwathTest
 			{
 				float latitude = lats.getFloat(idx);
 				float longitude = lons.getFloat(idx);
-				Coordinate coord = new Coordinate(longitude, latitude);
+				Coordinate coord = new Coordinate(latitude, longitude);
 				if( prevCoord != null && Math.abs(coord.x - prevCoord.x) > 10)
 				{
 					LineString line = geometryFactory.createLineString( coords.toArray(new Coordinate[coords.size()]) );

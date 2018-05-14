@@ -1,0 +1,16 @@
+{
+  "name": "GreyScale",
+  "cyclicOrigin": -1,
+  "useInterpolation": true,
+  "colors": [
+    {
+      "color": "000000ff",
+      "value": 0.1
+    },
+    {
+      "color": "FFFFFFff",
+      "value": 1.0
+    }
+  ],
+  "empty": "00000000"
+}

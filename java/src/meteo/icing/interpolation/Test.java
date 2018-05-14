@@ -7,10 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import meteo.geo.GranuleSwath;
-import meteo.geo.ISwath;
 import meteo.icing.era.Conf;
-import ucar.ma2.Array;
 import ucar.nc2.Dimension;
 import ucar.nc2.Group;
 import ucar.nc2.NetcdfFileWriter;
@@ -33,7 +30,7 @@ public class Test
 //		CloudsatIndex satIndex = new CloudsatIndex(conf);
 //		EraIndex eraIndex = new EraIndex(conf);
 
-		String satfilename = conf.satDir + "/2010-01/28/2010028080036_19965_CS_2B-GEOPROF-LIDAR_GRANULE_P2_R04_E03.hdf";
+/*		String satfilename = conf.satDir + "/2010-01/28/2010028080036_19965_CS_2B-GEOPROF-LIDAR_GRANULE_P2_R04_E03.hdf";
 		File satfile = new File( satfilename );
 
 		NetcdfDataset satncd = NetcdfDataset.openDataset( satfile.getAbsolutePath() );
@@ -41,9 +38,9 @@ public class Test
 		Array lats = swath.getLats();
 		Array lons = swath.getLons();
 		
-		System.out.println( satncd );
+		System.out.println( satncd );*/
 		
-		String ecmfilename = conf.eraDir + "/2016-09/06/2016-09-06_00Z_GP_isobaric.nc";
+		String ecmfilename = conf.eraDir + "/2016-09/06/2016-09-06_00Z_U_isobaric.nc";
 		File ecmfile = new File( ecmfilename );
 
 		NetcdfDataset ecmncd = NetcdfDataset.openDataset( ecmfile.getAbsolutePath() );
@@ -106,7 +103,7 @@ public class Test
 				// find best matching swath position:
 				double minDistSqr = Double.MAX_VALUE;
 				int minDistIndex = -1;
-				
+				/*
 				for(int sidx = 0; sidx < lats.getSize(); sidx ++)
 				{
 					float satlat = lats.getFloat(sidx);
@@ -128,7 +125,7 @@ public class Test
 				 && Math.abs( point.getLongitude() - satlon) < lonspan )
 				{
 					System.out.println(point + " ::: " + satlat + "," + satlon);
-				}
+				}*/
 			}
 		
 //		System.out.println(minlat);

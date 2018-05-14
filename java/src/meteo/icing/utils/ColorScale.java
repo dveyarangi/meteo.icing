@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 
+import lombok.Getter;
+import meteo.icing.utils.ColorScaleConf.ColoredValue;
 
 /**
  * Maps float values to colors.
@@ -19,8 +21,8 @@ public class ColorScale
     	C toColor(float r, float g, float b, float a);
     }
 
-    public ColorCreator <com.badlogic.gdx.graphics.Color> LIBGDX_CREATOR = (r,g,b,a) -> new com.badlogic.gdx.graphics.Color(r,g,b,a);
-    public ColorCreator <java.awt.Color>                     AWT_CREATOR = (r,g,b,a) -> new java.awt.Color(r,g,b,a);
+    public static ColorCreator <com.badlogic.gdx.graphics.Color> LIBGDX_CREATOR = (r,g,b,a) -> new com.badlogic.gdx.graphics.Color(r,g,b,a);
+    public static ColorCreator <java.awt.Color>                     AWT_CREATOR = (r,g,b,a) -> new java.awt.Color(r,g,b,a);
 
     public ColorCreator <com.badlogic.gdx.graphics.Color> DEFAULT_CREATOR = LIBGDX_CREATOR;
 
@@ -35,9 +37,15 @@ public class ColorScale
 	 */
 	private float max;
 
-	private List <Color> colors;
+	/**
+	 * List of colors and their matching normalized values.
+	 */
+	private List <ColoredValue> colors;
 
-	private ColorScaleConf conf;
+	/**
+	 * Confuguration
+	 */
+	@Getter private ColorScaleConf conf;
 
 
 
@@ -52,14 +60,13 @@ public class ColorScale
 		this( min, max, conf.colors );
 		this.conf = conf;
 	}
-	public ColorScale(float min, float max, List <Color> colors)
+	public ColorScale(float min, float max, List <ColoredValue> colors)
 	{
 		this.min = min;
 		this.max = max;
 		int colorNum = colors.size();
 
 		// copy color set to faster array
-
 		this.colors = new ArrayList <> ( colorNum );
 		for(int cidx = 0; cidx < colorNum; cidx ++)
 		{
@@ -76,59 +83,76 @@ public class ColorScale
 	}
 //	public Color toColor(float value)                           { return this.toColor( value, -1, DEFAULT_CREATOR ); }
 //	public Color toColor(float value, float alpha)              { return this.toColor( value, alpha, DEFAULT_CREATOR ); }
-	public <C> C toColor(float value, ColorCreator <C> creator) { return this.toColor( value, -1, creator ); }
-
 	/**
 	 * @param value to get color for
 	 * @param requestedAlpha alpha of the resulting color; keeps colorscale's alpha if negative
 	 * @param result ing color
 	 * @return
-	 */
-	public <C> C toColor(float value, float requestedAlpha, ColorCreator <C> result)
-	{
-		if( Float.isNaN( value ))
-			return  null;
-
+	 */	
+	public <C> C toColor(float value, ColorCreator <C> result) 
+	{ 
 		Color color;
+		if( Float.isNaN( value ))
+		{
+			color = conf.empty;
+			return result.toColor( color.r, color.g, color.b, color.a );
+		}
+		
 		int colorNum = colors.size();
 
-		if( value <= min )
+		if( value <= min || value < colors.get( 0 ).value)
+		{
 			// value below minimum for this colorscale
 			color = this.colorBelow( 0 );
-		else
-			if( value >= max) // value above maximum for this colorscale
-				color = this.colorAbove( colorNum-1 );
-			else
-			{	// picking color
-				float normVal = ( value - min ) * (colorNum-1) / (max-min);
-				int floor = FastMath.floor( normVal );
-				int ceil = FastMath.ceil( normVal );
+			return result.toColor( color.r, color.g, color.b, color.a );
+		}
+		
+		if( value >= max || value > colors.get( colors.size()-1 ).value) // value above maximum for this colorscale
+		{
+			color = this.colorAbove( colorNum-1 );
+			return result.toColor( color.r, color.g, color.b, color.a );
+		}
+		// picking color
+		float normVal = ( value - min ) / (max-min);
 
-				if(value == floor) // value exactly matches a color index
-					color = colors.get( this.toColorIdx(floor) );
-				else
-					if( !conf.useInterpolation ) // use closes index
-						color = colors.get( this.toColorIdx( Math.round( normVal ) ) );
-					else
-					{	// interpolate!
-						Color lower = colors.get( floor );
-						Color upper = this.colorAbove( floor );
+		// locate lower index:
+		int idx = 0;
+		while( idx < colorNum-1 )
+		{
+			if( colors.get( idx ).getValue() <= normVal 
+			 && colors.get(idx+1).getValue() > normVal )
+				break;
+			idx ++;
+		} 
+		
+		ColoredValue cv1 = colors.get( idx );
+		float p1 = cv1.getValue();
+		
+		if( p1 == normVal                // value is at exact color
+		 || idx >= colorNum-1       // last color in the list
+		 || ! conf.useInterpolation )    // not interpolating
+		{
+			color = cv1.getColor();
+			return result.toColor( color.r, color.g, color.b, color.a );
+		}
+		
+		// interpolate!
+		ColoredValue cv2 = colors.get( idx+1);
+		float p2 = cv2.getValue();
+		
+		Color lower = cv1.getColor();
+		Color upper = cv2.getColor();
+		
+		float dc = (normVal - p1) / (p2 - p1);
+//		System.out.println(dc);
 
+		float r = (lower.r * (1-dc) + upper.r * dc);
+		float g = (lower.g * (1-dc) + upper.g * dc);
+		float b = (lower.b * (1-dc) + upper.b * dc);
+		float a = (lower.a * (1-dc) + upper.a * dc);
+			
+		return result.toColor( r, g, b, a );
 
-						float dc = ceil == floor ? 0 :
-							(normVal - floor) / (ceil - floor);
-
-						float r = (lower.r * (1-dc) + upper.r * dc);
-						float g = (lower.g * (1-dc) + upper.g * dc);
-						float b = (lower.b * (1-dc) + upper.b * dc);
-						float a = requestedAlpha < 0 ? (lower.a * (1-dc) + upper.a * dc) : requestedAlpha;
-						return result.toColor( r, g, b, a );
-					}
-			}
-
-		float alpha = requestedAlpha < 0 ? color.a : requestedAlpha;
-
-		return result.toColor( color.r, color.g, color.b, alpha );
 	}
 
 	/**
@@ -138,9 +162,9 @@ public class ColorScale
 	{
 		if( idx <= 0 )
 			return conf.belowScale != null ? conf.belowScale  // has configured color for infimum values ?
-						 			         : colors.get( this.toColorIdx( 0 ));  // use lowest value from the scale
+						 			         : colors.get( this.toColorIdx( 0 )).getColor();  // use lowest value from the scale
 		else
-			return colors.get( this.toColorIdx( idx-1 ));
+			return colors.get( this.toColorIdx( idx-1 )).getColor();
 	}
 	/**
 	 * Retrieves color for value just above given index.
@@ -149,16 +173,18 @@ public class ColorScale
 	{
 		if( idx >= colors.size()-1)
 			return conf.aboveScale != null ? conf.aboveScale
-										   : colors.get( this.toColorIdx( colors.size()-1 ));
+										   : colors.get( this.toColorIdx( colors.size()-1 )).getColor();
 		else
-			return colors.get( this.toColorIdx( idx+1 ));
+			return colors.get( this.toColorIdx( idx+1 )).getColor();
 	}
 
 	public java.awt.Color toAWTColor( float value )
 	{
 		return this.toColor( value, AWT_CREATOR );
 	}
-//	public ColorCreator getCreator() { return creator; }
-
+	public Color toGDXColor( float value )
+	{
+		return this.toColor( value, LIBGDX_CREATOR );
+	}
 
 }

@@ -6,6 +6,9 @@
 **/__pycache__/
 *.pyc
 .gradle/**
+
+/output/**
+
 python_hdf4-0.9-cp27-cp27m-win_amd64.whl
 python/util/try.nc
 python/util/ERA_Interim/2000/2000-09/03/2000-09-03_18Z_LWC_isobaric.nc
